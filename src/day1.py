@@ -1,11 +1,11 @@
 # https://adventofcode.com/2024/day/1
-# %%
+# %% IMPORT 
 from typing import Union
 from pathlib import Path
 from common import INPUT_DIR
 import numpy as np
 
-# %%
+# %% UTILITY FUNCTIONS
 
 def fromstring(text:str)->np.array:
     """Attempt to redefine fromstring for easier access
@@ -82,28 +82,71 @@ def find_sum_min_dist(lists:np.ndarray)->int:
     """
     return np.sum(np.abs(lists[:,1]-lists[:,0]))
 
+def compute_similarity_score(lists:np.ndarray)-> int:
+    """Brute force similarity score as explained by the quiz
+
+    Parameters
+    ----------
+    lists : np.ndarray
+        the lists
+
+    Returns
+    -------
+    int
+        similarity score
+    """
+    uniques, counts=np.unique(lists[:,0], return_counts=True)
+    similarity_score=0
+    for num, count in zip(uniques, counts):
+        similarity_score+=count * num * np.count_nonzero(lists[:,1]==num)
+    return similarity_score
 
 
 
-def main_quiz1():
-    FILE_QUIZ1 = INPUT_DIR/"day1_quiz1.txt"
-    lists = parse_file(FILE_QUIZ1, True)
-    sorted_lists = sort(lists)
-    result = find_sum_min_dist(sorted_lists)
-    return result
-
-def test_quiz1():
-    TEST_QUIZ1="""3   4
+# %%
+TEST_QUIZ="""3   4
 4   3
 2   5
 1   3
 3   9
 3   3"""
-    lists = parse_file(TEST_QUIZ1, False)
+
+FILE_QUIZ = INPUT_DIR/"day1.txt"
+
+# %%
+def main_quiz1():
+    lists = parse_file(FILE_QUIZ, True)
     sorted_lists = sort(lists)
     result = find_sum_min_dist(sorted_lists)
-    assert result==11, "Result is wrong, check your code"
+    return result
+
+def test_quiz1():    
+    lists = parse_file(TEST_QUIZ, False)
+    sorted_lists = sort(lists)
+    result = find_sum_min_dist(sorted_lists)
+    assert result==11, "Result for quiz1 is wrong, check your code"
+
+def main_quiz1():
+    lists = parse_file(FILE_QUIZ, True)
+    sorted_lists = sort(lists)
+    result = find_sum_min_dist(sorted_lists)
+    return result
+
+def test_quiz2():    
+    lists = parse_file(TEST_QUIZ, False)
+    sorted_lists = sort(lists)
+    result = compute_similarity_score(sorted_lists)
+    assert result==31, "Result for quiz2 is wrong, check your code"
+
+def main_quiz2():
+    lists = parse_file(FILE_QUIZ, True)
+    sorted_lists = sort(lists)
+    result = compute_similarity_score(sorted_lists)
+    return result
+
 
 if __name__=="__main__":
     test_quiz1()
     print("Result for quiz 1 is", main_quiz1())
+    test_quiz2()
+    print("Result for quiz 2 is", main_quiz2())
