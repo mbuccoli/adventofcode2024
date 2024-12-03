@@ -1,5 +1,5 @@
 # https://adventofcode.com/2024/day/2
-4# %% IMPORT
+# %% IMPORT
 from typing import Union
 from pathlib import Path
 from common import INPUT_DIR, check_test

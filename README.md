@@ -18,6 +18,9 @@ I made two mistakes here:
 
 As expected, docstrings are gone but function names are readable enough
 
+### Day3
+Dear future me, please don't judge my parse function.
+
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
 You can learn other info on myself and contact me through my website mbuccoli.github.io .
