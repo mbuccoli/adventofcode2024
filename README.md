@@ -25,6 +25,12 @@ Dear future me, please don't judge my parse function.
 Finished during night, as I had a short lunch break. Curiously, second quiz looked easier than the first one.
 For the first quiz I'm not sure I took the easiest path: instead of looking for "XMAS" strings directly, I first looked for all the possible substrings.
 
+### Day5
+I was almost going to create a topological sorting algorithm, but luckily I remembered "topological sorting" is a thing and found out Python has a library to solve it. Code is architecturally wrong but I have dinner out tonight so little time to refine it.
+
+TODO for me, study again sets (I too often use dictionaries instead) and graphs.
+
+
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
 You can learn other info on myself and contact me through my website mbuccoli.github.io .
