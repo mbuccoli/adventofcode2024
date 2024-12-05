@@ -1,4 +1,4 @@
-# https://adventofcode.com/2024/day/3
+# https://adventofcode.com/2024/day/4
 # %% IMPORT
 from typing import Union
 from pathlib import Path
