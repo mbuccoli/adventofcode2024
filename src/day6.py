@@ -41,6 +41,8 @@ class Day6Quiz(DayQuiz):
     def walk(self, data):
         # make a step, turn it into one, go on
         R, C = data["map"].shape
+        data["is_loop"]=False
+            
         start_pos = data["guard_pos"]
         # compute next pos
         next_pos= start_pos+self.guard_move[data["guard_look"]]
@@ -57,7 +59,9 @@ class Day6Quiz(DayQuiz):
         val = data["guard_look"]+1 # So I can keep track on what happened there
         if data["guard_look"] == val:
             # this is a loop, let's exit
+            data["is_loop"]=True
             return False
+        # WHAT HAPPENS if the same cell is used twice in a loop? well: it happens nothing, but eventually we find a loop, hopefully...
         data["map"][*next_pos]=val 
         data["guard_pos"]=next_pos
         return True
@@ -74,14 +78,32 @@ class Day6Quiz(DayQuiz):
             pass
         
         return self.compute_number(data)
-    
-    # def solve_quiz2(self, test_data=None):
-    #     rules, updates = self.get_data(test_data)
-    #     rules, updates = self.refine_data(rules, updates)
-    #     _, wrong_updates = self.filter_updates(rules, updates)
-    #     fixed_updates = self.fix_updates(rules, wrong_updates)
-    #     return self.sum_middle_number(fixed_updates)
+    def copy_data(self,data):
+        new_data={v: data[v].copy() for v in ["map", "guard_pos"]}
+        new_data["guard_look"]=data["guard_look"]
+        new_data["is_loop"]=False
+        return new_data
+    def count_loops(self, data):
+        walked_data = self.copy_data(data)
+        while self.walk(walked_data):
+            pass
+        walked_data[*data["guard_pos"]] = -1
+        possible_obstacles = np.where(walked_data["map"]==1)
+        loops=0
+        for i, j in zip(*possible_obstacles):
+            print(i,j)
+            new_data=self.copy_data(data)
+            new_data["map"][i, j]=-1
 
+            while self.walk(new_data):
+                pass
+            loops+=int(new_data["is_loop"])
+        return loops        
+    def solve_quiz2(self, test_data=None):
+        data = self.get_data(test_data)
+        
+        return self.count_loops(data)
+    
 
 if __name__ == "__main__":
     quiz_fn = INPUT_DIR / "day6.txt"
