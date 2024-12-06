@@ -53,15 +53,19 @@ class Day6Quiz(DayQuiz):
         if data["map"][*next_pos]==-1:
             data["guard_look"] = (data["guard_look"] +1)%4
             return True
-        # else make a step and return
-        data["map"][*next_pos]=1
+        # if next_pos was already visited, make sure you're not in a loop before having a step 
+        val = data["guard_look"]+1 # So I can keep track on what happened there
+        if data["guard_look"] == val:
+            # this is a loop, let's exit
+            return False
+        data["map"][*next_pos]=val 
         data["guard_pos"]=next_pos
         return True
 
     def compute_number(self, data):
         map_changed= data["map"]
         map_changed[map_changed==-1]=0
-        return np.sum(map_changed)
+        return np.sum(np.sign(map_changed))
 
 
     def solve_quiz1(self, test_data=None):
@@ -98,8 +102,8 @@ if __name__ == "__main__":
     result_test1=d6q.solve_quiz1(test_data=test_data)
     check_test(1, result_test1, true_result=41)
     print("Quiz1 result is", d6q.solve_quiz1())
-    # result_test2=d5q.solve_quiz2(test_data=test_data) 
-    # check_test(2, result_test2, true_result=123)    
-    # print("Quiz2 result is", d5q.solve_quiz2())
+    result_test2=d6q.solve_quiz2(test_data=test_data) 
+    check_test(2, result_test2, true_result=6)    
+    print("Quiz2 result is", d6q.solve_quiz2())
 
 # %%
