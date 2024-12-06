@@ -16,9 +16,6 @@ class DayQuiz:
         self.quiz_fn = quiz_fn
         self.data = None
         
-    def parse(self, text):
-        pass
-
     def get_data(self, test_data):
         if test_data is not None:
             return self.parse(test_data)

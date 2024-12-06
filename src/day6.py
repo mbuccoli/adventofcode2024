@@ -24,7 +24,7 @@ class Day6Quiz(DayQuiz):
         # map is a numpy array filled with 0s where nothing append, obstacle is -1 and path is 1 
         # let's also look for directions and return as an index guard with an index of position
         chars_to_num={".":0, "#":-1}
-        chars_to_num.update({v: 1 for v in self.guard_looks})
+        chars_to_num.update({v: self.guard_looks[v]+1 for v in self.guard_looks})
         guard_pos=[]
         guard_look=""
         map_=[]
@@ -55,9 +55,10 @@ class Day6Quiz(DayQuiz):
         if data["map"][*next_pos]==-1:
             data["guard_look"] = (data["guard_look"] +1)%4
             return True
-        # if next_pos was already visited, make sure you're not in a loop before having a step 
+
+        # if next_pos was already visited, make sure you're not in a loop before having a step         
         val = data["guard_look"]+1 # So I can keep track on what happened there
-        if data["guard_look"] == val:
+        if data["map"][*next_pos] == val:
             # this is a loop, let's exit
             data["is_loop"]=True
             return False
@@ -84,22 +85,27 @@ class Day6Quiz(DayQuiz):
         new_data["is_loop"]=False
         return new_data
     def count_loops(self, data):
+        # probably multiprocessing could be a better idea
         walked_data = self.copy_data(data)
         while self.walk(walked_data):
             pass
         walked_data[*data["guard_pos"]] = -1
-        possible_obstacles = np.where(walked_data["map"]==1)
+        possible_obstacles = np.where(walked_data["map"]>0)
         loops=0
+        k=0
         for i, j in zip(*possible_obstacles):
-            print(i,j)
             new_data=self.copy_data(data)
             new_data["map"][i, j]=-1
-
+            step=0
             while self.walk(new_data):
+                print(f"\r{k}/{len(possible_obstacles[0])}; step {step}            ", end="")
+                step +=1
                 pass
             loops+=int(new_data["is_loop"])
+            k+=1
         return loops        
     def solve_quiz2(self, test_data=None):
+        self.data=None # reset the map
         data = self.get_data(test_data)
         
         return self.count_loops(data)

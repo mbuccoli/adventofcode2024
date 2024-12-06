@@ -30,6 +30,8 @@ I was almost going to create a topological sorting algorithm, but luckily I reme
 
 TODO for me, study again sets (I too often use dictionaries instead) and graphs.
 
+### Day6
+For the second quiz I probably chose a bruter force solution than needed, which takes a lot. I'm very curious to know what could be a better way to solve it.
 
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
