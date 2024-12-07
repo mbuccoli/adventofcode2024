@@ -43,26 +43,11 @@ class Day7Quiz(DayQuiz):
         
         return check_sum + check_prod + check_concat
 
-    # def filter_equations(self, data: dict):
-    #     data["filtered_equations"] = []
-    #     for i, (res, vals) in enumerate(data["equations"]):
-    #         # check how many combiantions we can have (one is enough, but let's keep everything)
-    #         # WE CAN USE A BINARY
-            
-    #         how_many = self.check_res(res, partial_res=0, vals=vals)
-    #         if how_many>0:
-    #             data["filtered_equations"].append((res, i, how_many))
-
     def count_test_values(self, data: dict):
         num = 0
         for res, _, _ in data["filtered_equations"]:
             num += res
         return num
-
-    def solve_quiz1(self, test_data=None):
-        data = self.get_data(test_data)
-        self.filter_equations(data, check_func=self.check_res)
-        return self.count_test_values(data)
 
     def filter_equations(self, data: dict, check_func):
         data["filtered_equations"] = []
@@ -75,50 +60,10 @@ class Day7Quiz(DayQuiz):
             else:
                 data["wrong_equations"].append((res, i, how_many))
 
-    def compute_res(self, vals):
-        if len(vals)==1:
-            return vals
-        results=[]
-        possible_comb = 2**(len(vals)-1) # if I have 4 values, I have 2*2*2 = 8 possible combinations of operators
-        for comb in range(possible_comb):   # let's scroll that
-            partial_res=vals[0]    # first I use compute
-            for i in range(1,len(vals)):   # than for all the possible values in the following 
-                if ((1<<(i-1)) & comb):   # I place a 1 and check if the bit in the i-th position is 0 or 1, and I multiply or sum accordingly
-                    partial_res *= vals[i]
-                else:  
-                    partial_res += vals[i]
-            results.append(partial_res)
-        return results    
-
-        
-    def apply_concatenation(self, data):
-        # first, we only want wrong ones
-
-        # Now, is there only ONE concatenation possible or more concatenations are possible?        
-        # let's stay safe and assume 1, than I'll check with many
-
-        # For an equation with N vals, N-1 possible positions of operator exist. So I need to make that possible
-        
-        for res, i, _ in data["wrong_equations"]:
-            res2, vals=data["equations"][i]
-            assert res==res2, f"Some problem here at index {i}"
-            found=False
-            for op_j  in range(1,len(vals)):
-                # I need to have a list of results for left side and right side and then
-                res_left= self.compute_res(vals[:op_j])
-                res_right = self.compute_res(vals[op_j:])
-                
-                for left, right in product(res_left, res_right):
-                    if int(str(left)+str(right)) == res:
-                        found=True
-                        break
-                if found:
-                    break
-            if found:
-                data["filtered_equations"].append((res, i, 1))
-                        
-
-
+    def solve_quiz1(self, test_data=None):
+        data = self.get_data(test_data)
+        self.filter_equations(data, check_func=self.check_res)
+        return self.count_test_values(data)
 
     def solve_quiz2(self, test_data=None):
         data = self.get_data(test_data)
