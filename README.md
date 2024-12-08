@@ -37,6 +37,9 @@ For the second quiz I probably chose a bruter force solution than needed, which 
 Oops I did it again, jump on the solution before better reading the instructions. This is a common mistake: who has the time for reading the instructions?
 Turned out if I had taken the time, I would not have spent a lot of time trying a wrong and very elaborate solution.
 
+### Day 8
+This was easier to solve than to understand. 
+
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
 You can learn other info on myself and contact me through my website mbuccoli.github.io .

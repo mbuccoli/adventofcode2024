@@ -34,7 +34,7 @@ class Day8Quiz(DayQuiz):
         data["freqs"] = freqs
         return data
     
-    def find_antinodes_freq(self, data, freq):
+    def find_antinodes_freq(self, data, freq, num_antinodes):
         N, M = data["map"].shape
         
         def in_map(p):
@@ -45,20 +45,28 @@ class Day8Quiz(DayQuiz):
         for k, p1 in enumerate(idxs[:-1]):
             for p2 in idxs[k+1:]:
                 dist = p2-p1
+                
                 p_l = p1 - dist
-                p_r = p2 + dist
-                if in_map(p_l):
-                    data["antinodes"][*p_l] += 1                 
-                if in_map(p_r):
-                    data["antinodes"][*p_r] += 1 
+                k=0                
+                while k<num_antinodes and in_map(p_l):
+                    data["antinodes"][*p_l] += 1
+                    p_l -= dist
+                    k+=1
+                p_r = p2 + dist                
+                k=0     
+                while k<num_antinodes and in_map(p_r):
+                    data["antinodes"][*p_r] += 1
+                    p_r += dist
+                    k+=1   
+                 
         return data
         
-    def find_antinodes(self, data):
+    def find_antinodes(self, data, num_antinodes=1):
         # for each pair of antennas place an antinode, when possible         
         data["antinodes"] = np.zeros_like(data["map"])
         for freq in range(1,len(data["freqs"])+1):
-            data = self.find_antinodes_freq(data, freq)
-
+            data = self.find_antinodes_freq(data, freq, num_antinodes)
+  
         return data
     def count_antinodes(self, data):
         return np.sum(np.sign(data["antinodes"]))
@@ -70,7 +78,10 @@ class Day8Quiz(DayQuiz):
 
     def solve_quiz2(self, test_data=None):
         data = self.get_data(test_data)
-        pass
+        data = self.find_antinodes(data, num_antinodes=np.inf)
+        data["antinodes"]+=data["map"]
+        return self.count_antinodes(data)
+
 
 if __name__ == "__main__":
     quiz_fn = INPUT_DIR / "day8.txt"
@@ -92,8 +103,8 @@ if __name__ == "__main__":
     result_test1 = d8q.solve_quiz1(test_data=test_data)
     check_test(1, result_test1, true_result=14)
     print("Quiz1 result is", d8q.solve_quiz1())
-    # result_test2 = d8q.solve_quiz2(test_data=test_data)
-    # check_test(2, result_test2, true_result=11387)
-    # print("Quiz2 result is", d8q.solve_quiz2())
+    result_test2 = d8q.solve_quiz2(test_data=test_data)
+    check_test(2, result_test2, true_result=34)
+    print("Quiz2 result is", d8q.solve_quiz2())
 
 # %%
