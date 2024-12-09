@@ -40,6 +40,11 @@ Turned out if I had taken the time, I would not have spent a lot of time trying 
 ### Day 8
 This was easier to solve than to understand. 
 
+### Day 9
+Quiz 1 was solved quick&dirt, Quiz 2 took more effort and runs greatly faster.
+Fun fact: I was commenting the quiz with a colleague and we joked about the first quiz was about "fragmenting" the disk. 
+
+
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
 You can learn other info on myself and contact me through my website mbuccoli.github.io .
