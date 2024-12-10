@@ -44,6 +44,8 @@ This was easier to solve than to understand.
 Quiz 1 was solved quick&dirt, Quiz 2 took more effort and runs greatly faster.
 Fun fact: I was commenting the quiz with a colleague and we joked about the first quiz was about "fragmenting" the disk. 
 
+### Day 10
+Nice solution, quiz 2 took me more than I want to admit: the logic was easy, but I left a nasty bug.
 
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
