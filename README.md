@@ -1,7 +1,7 @@
 # adventofcode2024
 
 ## Intro
-Just another repo of a white straight guy trying to solve  advent of code for 24 days straight.
+Just another random guy trying to solve advent of code for 24 days straight.
 
 ## Journal
 ### Day 1
