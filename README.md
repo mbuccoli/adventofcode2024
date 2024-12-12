@@ -51,6 +51,8 @@ Nice solution, quiz 2 took me more than I want to admit: the logic was easy, but
 Solved the first quiz in 8 minutes, took several hours before surrending and check the solution on Reddit.
 However, I am quite satisfied to see that the hint of the solution was enough, and I am also happy that now solving this kind of problem is in my toolbox (or at least I hope so).
 
+### Day 12
+Quiz 2 took me forever, it's getting interesting.
 
 
 ## Who am I

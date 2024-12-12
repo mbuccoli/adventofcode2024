@@ -42,7 +42,7 @@ class Region:
     
 
     def compute_discounted_edges(self):
-        self.long_edges = np.zeros((len(self.idxs), 4))
+        self.long_edges = np.zeros((len(self.idxs), 4), dtype=int)
         
         for i, idx in enumerate(self.idxs):
             for d, delta in enumerate(deltas):
@@ -203,7 +203,7 @@ MMMISSJEEE"""
     cost, regions =  solve_quiz1(test_data=test_data3)
     check_test(1.3, cost, true_result=1930)
 
-    print("Quiz1 result is", solve_quiz1(fn=quiz_fn)[0])
+    print("🎄🎄🎄 Quiz1 result is ", solve_quiz1(fn=quiz_fn)[0], "🎄🎄🎄")
 
     cost, regions =  solve_quiz2(test_data=test_data1)
     check_test(2.1, cost, true_result=80)
@@ -212,6 +212,6 @@ MMMISSJEEE"""
     cost, regions =  solve_quiz2(test_data=test_data3)
     check_test(2.3, cost, true_result=1206)
 
-    print("Quiz2 result is", solve_quiz2(fn=quiz_fn)[0])
+    print("🎅 🎅 🎅 Quiz2 result is", solve_quiz2(fn=quiz_fn)[0],"🎅 🎅 🎅")
 
 # %%

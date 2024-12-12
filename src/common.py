@@ -5,8 +5,8 @@ INPUT_DIR= Path(__file__).parent.parent / "inputs"
 def check_test(quiz_n, result, true_result):
     assert (
         result == true_result
-    ), f"❌Quiz {quiz_n} solution {result} does not match correct solution {true_result}"
-    print(f"✅Quiz {quiz_n} solution {result} matches correct solution {true_result}")
+    ), f"❌ Quiz {quiz_n} solution {result} does not match correct solution {true_result}"
+    print(f"✅ Quiz {quiz_n} solution {result} matches correct solution {true_result}")
 
 def parse_mat(text, map_func=lambda x: x):
     mat = [np.array([map_func(char) for char in line]) for line in text.split("\n")]
