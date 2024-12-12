@@ -23,52 +23,44 @@ def blink(array, blink_times):
     return blink(new_array, blink_times-1)
 
 
-def fast_blink(array, blink_times):
-    new_array=array.copy()
-    new_array[new_array==0]=1
-    val_log10 = np.floor(np.log10(new_array))
-    idxs_log10 = np.mod(val_log10,2)==1
-    val_log10 = val_log10[idxs_log10]
-    idxs_log10=idxs_log10[idxs_log10]
-    div_value = np.power(10, 1+val_log10//2)
-    upper_part = new_array[idxs_log10] // div_value 
-    lower_part = new_array[idxs_log10] - upper_part*div_value
-    for i in idxs_log10[::-1]:
-        new_array = np.insert(new_array, np.array([upper_part[i], lower_part[i]]),i)
+def solve_hash(array, blink_times):
+    hash_howmany={val:1 for val in array}
+    hash_whatafter={}
+    for _ in range(blink_times):
+        new_hash_howmany={}
+        for elem, howmany in hash_howmany.items():            
+            if elem not in hash_whatafter:
+                hash_whatafter[elem]=blink([elem], 1)
+            for wa in hash_whatafter[elem]:
+                howmany_current = new_hash_howmany.get(wa, 0)
+                new_hash_howmany[wa] = howmany_current + howmany
+        hash_howmany = new_hash_howmany            
     
-    new_array[even_values] 
-    for val in array:
-        if val==0:
-            new_array.append(1)
-        elif (len(str(val))%2) ==0:
-            str_val=str(val)
-            i=len(str_val)//2
-            new_array.extend([int(str_val[:i]),int(str_val[i:])])
-        else:
-            new_array.append(val*2024)
-    if blink_times==1:
-        return new_array
-    return blink(new_array, blink_times-1)
+    return np.sum([v for _, v in hash_howmany.items()])
 
 
-def solve_quiz1(fn=None, test_data=None, blink_times=25):
+def solve_quiz(fn=None, test_data=None, blink_times=25):
     text_data = get_data(fn, test_data)
     array = parse_array(text_data)
-    blinked_array = blink(array, blink_times)
-    return len(blinked_array)
+    # blinked_array = blink(array, blink_times)
+    # return len(blinked_array)
+    return solve_hash(array, blink_times)
 
-
-
+            
+          
 
 if __name__ == "__main__":
     quiz_fn = INPUT_DIR / "day11.txt"
 
     test_data = """125 17"""
-
-    result_test1 = solve_quiz1(test_data=test_data, blink_times=6)
+    
+    result_test1 = solve_quiz(test_data=test_data, blink_times=6)
     check_test(1, result_test1, true_result=22)
-    result_test1 = solve_quiz1(test_data=test_data)
+    result_test1 = solve_quiz(test_data=test_data)
     check_test(1, result_test1, true_result=55312)
+    print("Quiz1 result is", solve_quiz(fn=quiz_fn))
 
-    print("Quiz1 result is", solve_quiz1(fn=quiz_fn))
-    print("Quiz2 result is", solve_quiz1(fn=quiz_fn, blink_times=75))
+
+    print("Quiz2 result is", solve_quiz(fn=quiz_fn, blink_times=75))
+# %%
+ 
