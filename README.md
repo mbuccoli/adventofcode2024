@@ -47,6 +47,12 @@ Fun fact: I was commenting the quiz with a colleague and we joked about the firs
 ### Day 10
 Nice solution, quiz 2 took me more than I want to admit: the logic was easy, but I left a nasty bug.
 
+### Day 11
+Solved the first quiz in 8 minutes, took several hours before surrending and check the solution on Reddit.
+However, I am quite satisfied to see that the hint of the solution was enough, and I am also happy that now solving this kind of problem is in my toolbox (or at least I hope so).
+
+
+
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
 You can learn other info on myself and contact me through my website mbuccoli.github.io .
