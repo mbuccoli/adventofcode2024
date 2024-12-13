@@ -24,28 +24,39 @@ def parse(text_data):
         data.append(claw_data)
     return data
 
-def solve_test(claws):
+def solve_test(claws, max_moves=100, position_offset=0):
     total_cost=0
     for claw in claws:
+        claw["px"]+=position_offset
+        claw["py"]+=position_offset
+        
         Nb = claw["px"]*claw["Ay"]- claw["py"]*claw["Ax"]
         Nb/= (claw["Bx"]*claw["Ay"] - claw["By"]*claw["Ax"])        
         Na = (claw["px"]-Nb*claw["Bx"])/claw["Ax"] 
         if Na-int(Na)!=0 or Nb-int(Nb)!=0:
             continue # not integer
-        if Na > 100 or Nb > 100:
+        if Na > max_moves or Nb > max_moves:
             continue
-        claw["Na"]=int(Na)
-        claw["Nb"]=int(Nb)
+        Na=int(Na)
+        Nb=int(Nb)
+        claw["Na"]=Na
+        claw["Nb"]=Nb
         claw["cost"]=Na*COST_A+Nb*COST_B
         total_cost += claw["cost"]
     return claws, total_cost    
-def solve_quiz(fn=None, test_data=None):
+def solve_quiz1(fn=None, test_data=None):
     text_data = get_data(fn, test_data)
     claws = parse(text_data)
     claws, total_cost = solve_test(claws)
 
     return total_cost
             
+def solve_quiz2(fn=None, test_data=None):
+    text_data = get_data(fn, test_data)
+    claws = parse(text_data)
+    claws, total_cost = solve_test(claws, max_moves=np.inf, position_offset=10000000000000)
+
+    return total_cost
           
 
 if __name__ == "__main__":
@@ -67,11 +78,12 @@ Button A: X+69, Y+23
 Button B: X+27, Y+71
 Prize: X=18641, Y=10279"""
     
-    result_test1 = solve_quiz(test_data=test_data)
+    result_test1 = solve_quiz1(test_data=test_data)
     check_test(1, result_test1, true_result=480)
     
-    print("🎄 🎄 🎄 Quiz1 result is", solve_quiz(fn=quiz_fn))
+    print("🎄 🎄 🎄 Quiz1 result is", solve_quiz1(fn=quiz_fn))
 
+    print("🎄 🎄 🎄 Quiz2 result is", solve_quiz2(fn=quiz_fn))
 
 # %%
 
