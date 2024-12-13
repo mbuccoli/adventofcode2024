@@ -54,6 +54,11 @@ However, I am quite satisfied to see that the hint of the solution was enough, a
 ### Day 12
 Quiz 2 took me forever, it's getting interesting.
 
+### Day 13
+This was really a good day for me. While I was reading the text, I noticed something misleading was in, when the text was saying "the minimum amount of moves" or "with the minimum amount of tokens".
+Luckily, it was a very simple system with two equation and two unknowns. Once solved, there was only one possible solution, and that could be either a natural number or not.
+So, this was time moving from quiz1 to quiz2 was really really a matter of three minutes.
+
 
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
