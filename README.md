@@ -59,6 +59,10 @@ This was really a good day for me. While I was reading the text, I noticed somet
 Luckily, it was a very simple system with two equation and two unknowns. Once solved, there was only one possible solution, and that could be either a natural number or not.
 So, this was time moving from quiz1 to quiz2 was really really a matter of three minutes.
 
+Edit: I noticed many people online fought against approximation, while I didn't. This is because instead of inverting the matrix, I computed the formula and kept simplifying it until I got a clean numerator vs denominator, which does not carry approximation issues.
+
+### Day 14
+Quiz 1 was quick, quiz 2 was hard, but luckily I got the right intuition (dear standard deviation, you've rarely failed me).
 
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
