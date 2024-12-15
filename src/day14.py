@@ -110,14 +110,3 @@ p=9,5 v=-3,-3"""
     print("🎄 🎄 🎄 Quiz2 result is", solve_quiz2(fn=quiz_fn))
 
 # %%
-
-# prize_x = N_a * a_x + N_b * b_x
-# prize_y = N_a * a_y + N_b * b_y
-
-# N_a = prize_x/a_x - (N_b*b_x)/a_x = prize_y/a_y - (N_b*b_y)/a_y
-
-# N_b*(b_x/a_x - b_y/a_y) = prize_x/a_x - prize_y/a_y
-# 
-#           prize_x*a_y - prize_y*a_x       
-# N_b =     --------------------------    
-#              (b_x*a_y - b_y*a_x)   
