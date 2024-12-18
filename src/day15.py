@@ -55,7 +55,7 @@ def find_pack_tree(mat, robot):
         found_pack=False
         for j in list(J):
             if np.abs(mat[k+1, j])==PACK_SYMBOL:
-                j2 = j - np.sign(mat[k+1,j]) # if its "-3", then I want to add to the right, otherwise I want to add to the right
+                j2 = j + np.sign(mat[k+1,j]) # if its "-3", then I want to add to the right, otherwise I want to add to the right
                 J.add(j2)
                 if (k+1, j) not in pairs:
                     pairs.append((k+1, j))
@@ -150,7 +150,7 @@ def expand_data(data):
     N, M=data["mat"].shape
     mat = np.tile(data["mat"].flatten()[:,None],(1,2))
     idxs = mat[:,0]==PACK_SYMBOL
-    mat[idxs,0]=-PACK_SYMBOL
+    mat[idxs,1]=-PACK_SYMBOL
     idxs = mat[:,0] == ROBOT_SYMBOL
     mat[idxs,1] = EMPTY_SYMBOL
     data["mat"]=np.reshape(mat, (N, 2*M))
@@ -164,7 +164,7 @@ def solve_quiz1(fn=None, test_data=None):
     data = execute_moves(data)
     return count_gps(data)
 
-sym_dict={EMPTY_SYMBOL:".",WALL_SYMBOL:"#", ROBOT_SYMBOL:"@", -PACK_SYMBOL:"[", PACK_SYMBOL:"]"}
+sym_dict={EMPTY_SYMBOL:".",WALL_SYMBOL:"#", ROBOT_SYMBOL:"@", PACK_SYMBOL:"[", -PACK_SYMBOL:"]"}
     
 
 def execute_moves2(data):    
@@ -173,7 +173,7 @@ def execute_moves2(data):
         print()
         print(c, cmd)
         print_mat(data["mat"], sym_dict)
-        input("\n")
+        #input("\n")
         if c==21:
             pass
         if cmd[0]==-1: # check upwards            
@@ -230,6 +230,16 @@ if __name__ == "__main__":
 
 <vv>^<v^>v>^vv^v>v<>v^v<v<^vv<<<^><<><>>v<vvv<>^v^>^<<<><<v<<<v^vv^v>^vvv<<^>^v^^><<>>><>^<<><^vv^^<>vvv<>><^^v>^>vv<>v<<<<v<^v>^<^^>>>^<v<v><>vv>v^v^<>><>>>><^^>vv>v<^^^>>v^v^<^^>v^^>v^<^v>v<>>v^v^<v>v^^<^^vv<<<v<^>>^^^^>>>v^<>vvv^><v<<<>^^^vv^<vvv>^>v<^^^^v<>^>vvvv><>>v^<<^^^^^^><^><>>><>^^<<^^v>>><^<v>^<vv>>v>>>^v><>^v><<<<v>>v<v<v>vvv>^<><<>^><^>><>^v<><^vvv<^^<><v<<<<<><^v<<<><<<^^<v<^^^><^>>^<v^><<<^>>^v<v^v<v^>^>>^v>vv>^<<^v<>><<><<v<<v><>v<^vv<<<>^^v^>^^>>><<^v>>v^v><^^>>^<>vv^<><^^>^^^<><vvvvv^v<v<<>^v<v>v<<^><<><<><<<^^<<<^<<>><<><^^^>^^<>^>v<>^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"""
     
+    small_test_data2="""#######
+#...#.#
+#.....#
+#..OO@#
+#..O..#
+#.....#
+#######
+
+<vv<<^^<<^^"""
+
     result_test_small = solve_quiz1(test_data=small_test_data)
     check_test(1, result_test_small, true_result=2028)
     
@@ -237,6 +247,8 @@ if __name__ == "__main__":
     check_test(1, result_test_large, true_result=10092)
 
     print("🎄 🎄 🎄 Quiz1 result is", solve_quiz1(fn=quiz_fn))
+    result_test_small2 = solve_quiz2(test_data=small_test_data2)
+    check_test(2, result_test_small2, true_result=105+207+306)
 
 
     result_test_large = solve_quiz2(test_data=large_test_data)
