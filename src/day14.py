@@ -45,15 +45,14 @@ def solve_quiz1(fn=None, test_data=None, shape=(SHAPE_X, SHAPE_Y)):
 
     return np.prod(count)
             
-def print_mat(mat):
+def print_mat(mat, sym_dict=None):
+    if sym_dict is None:
+        sym_dict={0:" "}
     for row in mat:
         row_text=""
         for elem in row:
-            if elem == 0:
-                row_text+=" "
-            else:
-                row_text+=str(elem%10)
-
+            row_text+=sym_dict.get(elem, str(elem%10))            
+            
         print(row_text)       
 
 
