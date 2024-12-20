@@ -6,7 +6,8 @@ from numpy.linalg import norm
 import matplotlib.pyplot as plt
 from day16 import EMPTY_SYMBOL, START_SYMBOL, END_SYMBOL, WALL_SYMBOL, sym2int, int2sym, parse
 # %%
-
+def mdist(x, axis=-1): #manhattan distance
+    return np.sum(np.abs(x), axis=axis)
 
 def find_path(data):
     idxs=[data["start_idx"],data["start_idx"]]
@@ -30,7 +31,7 @@ def find_cheats(data, max_ps):
     deltas_cheat =deltas*max_ps # I can move TWO positions
     possible_cheats=[]    
     for i, idx_i in enumerate(data["path"][:-2]):
-        idxs_idxs_j = np.where(norm(idx_i[None]-data["path"][i+2:], axis=1)<=max_ps)[0]
+        idxs_idxs_j = np.where(mdist(idx_i[None]-data["path"][i+2:], axis=1)<=max_ps)[0]
         for j in idxs_idxs_j:
             idx_j = data["path"][i+2+j]             
             for delta, delta_cheat in zip(deltas,deltas_cheat):
@@ -80,6 +81,7 @@ if __name__ == "__main__":
         check_test(f"\t1.{i} Comparing ps", picoseconds, true_result=true_ps)
         check_test(f"\t1.{i} Comparing count", count, true_result=true_count)
 
-    
-    print("🎄 🎄 🎄 Quiz1 result is", np.sum(solve_quiz1(fn=quiz_fn)>=100))
+    result_quiz1=    np.sum(solve_quiz1(fn=quiz_fn)>=100)
+    check_test(f"🎄 🎄 🎄 Quiz1 result is", result_quiz1, true_result=1459)
+
     
