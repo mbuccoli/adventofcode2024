@@ -58,7 +58,19 @@ def find_cheats_straight(data, max_ps):
     return data
 
 def find_cheats(data, max_ps):
-    return None
+    possible_cheats = []
+    min_ps=2
+    for i, idx_i in enumerate(data["path"][:-2]):
+        idxs_idxs_j = np.where(
+            mdist(idx_i[None] - data["path"][i + min_ps :], axis=1) <= max_ps
+        )[0]
+        for j in idxs_idxs_j:
+            idx_j = data["path"][i + min_ps + j]
+            save_amount=j-mdist(idx_i-idx_j)+min_ps
+            if save_amount > 0:
+                possible_cheats.append(save_amount)
+    data["cheats"] = np.array(possible_cheats)
+    return data
 
 def solve_quiz1(fn=None, test_data=None, max_ps=2):
     text_data = get_data(fn, test_data)
@@ -124,7 +136,10 @@ if __name__ == "__main__":
     result_quiz1 = np.sum(solve_quiz1(fn=quiz_fn) >= 100)
     check_test(f"🎄 🎄 🎄 Quiz1 result is", result_quiz1, true_result=1459)
 
-    cheats = solve_quiz1(test_data=test_data, max_ps=20)
+    cheats2 = solve_quiz2(test_data=test_data, max_ps=2)
+    result_ps2, result_count2 = np.unique(cheats2, return_counts=True)
+    #raise NameError("stop")
+    cheats = solve_quiz2(test_data=test_data, max_ps=20)
     result_ps, result_count = np.unique(cheats[cheats>=50], return_counts=True)
     true_cheats_50 = cheats = [
         [32, 50],
@@ -148,5 +163,8 @@ if __name__ == "__main__":
         true_count, true_ps = true_cheats_50[i]
         check_test(f"\t2.{i} Comparing ps", picoseconds, true_result=true_ps)
         check_test(f"\t2.{i} Comparing count", count, true_result=true_count)
+    result_quiz2 = np.sum(solve_quiz2(fn=quiz_fn, max_ps=20) >= 100)
+    check_test(f"🎄 🎄 🎄 Quiz2 result is", result_quiz2, true_result=1016066)
 
 
+# %%

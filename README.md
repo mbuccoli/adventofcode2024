@@ -67,6 +67,9 @@ Quiz 1 was quick, quiz 2 was hard, but luckily I got the right intuition (dear s
 ### Day 15
 Day 15 was solved Dec 20. December is a wonderful month, but there are too many deadlines and it was hard to find the energy to code after dinner, or the time to do it during lunch break.
 
+### Day 20
+I skipped too many days, so now I'll try to keep up with new quizzes and then solve old ones.
+
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
 You can learn other info on myself and contact me through my website mbuccoli.github.io .
