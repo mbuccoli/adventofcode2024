@@ -7,6 +7,7 @@ def check_test(quiz_n, result, true_result):
         result == true_result
     ), f"❌ Quiz {quiz_n} solution {result} does not match correct solution {true_result}"
     print(f"✅ Quiz {quiz_n} solution {result} matches correct solution {true_result}")
+    
 
 def parse_mat(text, map_func=lambda x: x):
     mat = [np.array([map_func(char) for char in line]) for line in text.split("\n")]
@@ -43,3 +44,15 @@ class DayQuiz:
         pass
     def solve_quiz2(self, test_data=None):
         pass
+       
+def print_mat(mat, sym_dict=None):
+    if sym_dict is None:
+        sym_dict={0:" "}
+    for row in mat:
+        row_text=""
+        for elem in row:
+            row_text+=sym_dict.get(elem, str(elem%10))            
+            
+        print(row_text)       
+
+deltas_cross=np.array([[1,0], [-1,0],[0, 1],[0,-1]])
