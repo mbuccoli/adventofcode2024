@@ -51,12 +51,14 @@ def find_pack_tree(mat, robot):
     found_pack=True
     block=False
 
-    while found_pack:
+    while found_pack: # this can be easily replaced by: while len(J)>0
         found_pack=False
+        newJ=set() # empty list for next level
         for j in list(J):
             if np.abs(mat[k+1, j])==PACK_SYMBOL:
                 j2 = j + np.sign(mat[k+1,j]) # if its "-3", then I want to add to the right, otherwise I want to add to the right
-                J.add(j2)
+                newJ.add(j2)
+                newJ.add(j)
                 if (k+1, j) not in pairs:
                     pairs.append((k+1, j))
                 if (k+1, j2) not in pairs:                
@@ -65,10 +67,9 @@ def find_pack_tree(mat, robot):
                 found_pack=True
             elif mat[k+1, j] == WALL_SYMBOL:
                 block = True
+        J=newJ
         k+=1
-    J=list(J)
-    J.sort()
-    return J, block, pairs
+    return block, pairs
 
     
 
@@ -82,7 +83,7 @@ def execute_move_down2(mat, robot):
         return mat, robot
     if mat[i+1, j]==WALL_SYMBOL: # this was also easy
         return mat, robot
-    J, block, idxs = find_pack_tree(mat, robot)
+    block, idxs = find_pack_tree(mat, robot)
     # now I know that a tree above me spans until J units.
     # however, if block is True, it means that above a package there is a wall, so I cannot raise it 
     if block:
@@ -118,9 +119,6 @@ def right_to_down(mat, robot, back_forth = "forth"):
 
 def execute_moves(data):
     for cmd in data["commands"]:
-        # print(cmd)
-        # print(data["robot"])
-        # print_mat(data["mat"])
         # let's manipulate the matrix and then always return the same stuff
         if cmd[0]==-1: # check upwards            
             mat, robot = up_to_down(data["mat"], data["robot"], "forth")
@@ -137,8 +135,7 @@ def execute_moves(data):
             mat, robot = right_to_down(data["mat"], data["robot"], "forth") 
             mat, robot = execute_move_down(mat, robot)
             data["mat"], data["robot"] = right_to_down(mat, robot, "back")
-        # print_mat(data["mat"])
-        # print(data["robot"])    
+        
     return data
 
 def count_gps(data):
@@ -165,23 +162,22 @@ def solve_quiz1(fn=None, test_data=None):
     return count_gps(data)
 
 sym_dict={EMPTY_SYMBOL:".",WALL_SYMBOL:"#", ROBOT_SYMBOL:"@", PACK_SYMBOL:"[", -PACK_SYMBOL:"]"}
-    
+sym_robot={-2:"^",2:"v", -1:"<",1:">" }
 
 def execute_moves2(data):    
     # same as before for left-right, it changes for up-down
+    wait_next_move=False
     for c, cmd in enumerate(data["commands"]):
-        print()
-        print(c, cmd)
-        print_mat(data["mat"], sym_dict)
-        #input("\n")
-        if c==21:
-            pass
+        sym_dict[ROBOT_SYMBOL]=sym_robot[cmd[0]*2+cmd[1]] # for debug reasons
+        
         if cmd[0]==-1: # check upwards            
             mat, robot = up_to_down(data["mat"], data["robot"], "forth")
             mat, robot = execute_move_down2(mat, robot)
-            data["mat"], data["robot"] = up_to_down(mat, robot, "back")            
+            data["mat"], data["robot"] = up_to_down(mat, robot, "back")                       
+            # input("\n"); wait_next_move=True
         elif cmd[0]==1: # check downwards
-            data["mat"], data["robot"] = execute_move_down2(data["mat"], data["robot"])                    
+            data["mat"], data["robot"] = execute_move_down2(data["mat"], data["robot"])
+            # input("\n"); wait_next_move=True                    
         elif cmd[1]==-1: # check left
             mat, robot = up_to_down(*right_to_down(data["mat"], data["robot"], "forth"), "forth") 
             mat, robot = execute_move_down(mat, robot)
