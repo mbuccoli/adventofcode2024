@@ -1,6 +1,7 @@
 # %%
-from common import INPUT_DIR, check_test, get_data, parse_mat, print_mat
+from common import INPUT_DIR, check_test, get_data, parse_mat, print_mat, deltas
 import numpy as np
+from numpy.linalg import norm
 import matplotlib.pyplot as plt
 # %%
 
@@ -21,6 +22,36 @@ def parse(text_data):
     "end_idx" : np.array([ei[0] for ei in end_idx])
     }
     return data
+
+def solve_maze(data, steps, next_attempt):
+    pass
+    # I want to score     
+
+    # Check the delta at which I can continue
+    # if the current delta is included, go on
+    #   BUT FIRST put the other deltas in next attempt as index, new delta
+    # if the current delta is not included, but another delta is, follow it
+    # if there is no other delta, pop the last attempt from the next one
+    
+    # once solved the maze, compute the score
+    
+    # follow the other directions  
+    
+    # if I can, add it to the steps and continue
+    # if I can
+    
+
+def solve_mazes(data):
+    start_delta=np.array([0, 1])
+    d = np.argmin(norm(deltas-start_delta[None], axis=1))
+    paths=[]
+    next_attemps=[]
+    start_idx=data["start_idx"]
+    end_idx=data["start_idx"]
+    
+    
+        
+    
 
 def solve_quiz1(fn=None, test_data=None):
     text_data = get_data(fn, test_data)
