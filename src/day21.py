@@ -6,7 +6,9 @@ from numpy.linalg import norm
 
 
 # %%
-
+def printd(*args):
+    #print(*args)
+    pass
 def parse(text_data):
     codes=[]
     codes_int=[]
@@ -136,30 +138,101 @@ class RobotDirectionalKeypad:
             idx+=delta
             new_seq+=self.mat_code[*idx]
         return new_seq    
+    def get_minpath(self, couple):
+        idx = lambda char: self.symbols.find(char)
+        return self.min_paths[idx(couple[0])][idx(couple[1])]
 
 
-def solve_quiz1(fn=None, test_data=None, max_ps=2):
+def solve_quiz1(fn=None, test_data=None, num_robots=2):
     text_data = get_data(fn, test_data)
     data = parse(text_data)
     complexities=[]
     for c, code in enumerate(data["codes"]):# FOR EACH CODE
         # 1. find the sequence that robot1 needs to type into the numerical keypad
-        robot2 = RobotDirNumericKeypad()
-        seq1 = robot2.type_code(code)
-        print(code, "\n  ",seq1)
-        assert robot2.type(seq1)==data["codes_str"][c]
+        robotNum = RobotDirNumericKeypad()
+        seq1 = robotNum.type_code(code)
+        
+        printd(data["codes_str"][c], "\n  ",seq1)
+        assert robotNum.type(seq1)==data["codes_str"][c]
     # 2. find the sequence that robot2 needs to type into the directional keyboard to move robot1
-        robot3 = RobotDirectionalKeypad()
-        seq2 = robot3.type_code(seq1)
-        assert robot3.type(seq2)==seq1
-        print("  ", seq2)
+        
+        robotDir = RobotDirectionalKeypad()
+        seq_i=seq1
+        for i in range(num_robots-1):
+            seq_next = robotDir.type_code(seq_i)
+            assert robotDir.type(seq_next)==seq_i
+            printd("  ", seq_next)
+            seq_i=seq_next
         
     # 3. find the sequence that I need to type into the directional keyboard to move robot2
-        seq3 = robot3.type_code(seq2)
-        print("  ", seq3)
+        seq_end = robotDir.type_code(seq_i)
+        printd("  ", seq_end)
             
     # 5. compute complexity as length of the sequence * code
-        complexities.append(int(data["codes_int"][c])*len(seq3))
+        complexities.append(int(data["codes_int"][c])*len(seq_end))
+        printd(f"\t {int(data["codes_int"][c])}*{len(seq_end)} = {complexities[-1]}")
+    return complexities
+
+def populate_hashcount(seq, couples):
+    hash_seqs={couple:0 for couple in couples}
+    if seq=="":
+        return hash_seqs
+    for i in range(len(seq)-1):
+        couple=seq[i]+seq[i+1]
+        hash_seqs[couple]+=1
+    return hash_seqs
+def seq2instr(resp):
+    list_instr=[]
+    prev_r="A"
+    for r in range(len(resp)):
+        list_instr.append(prev_r+resp[r])
+        prev_r=resp[r]
+    return list_instr
+
+
+def solve_quiz2(fn=None, test_data=None, num_robots=2):
+    text_data = get_data(fn, test_data)
+    data = parse(text_data)
+    complexities=[]
+    for c, code in enumerate(data["codes"]):# FOR EACH CODE
+        # 1. find the sequence that robot1 needs to type into the numerical keypad
+        robotNum = RobotDirNumericKeypad()
+        seq1 = robotNum.type_code(code)
+        printd(data["codes_str"][c], "\n  ",seq1)
+        assert robotNum.type(seq1)==data["codes_str"][c]
+        # E.g. for 029A is <A^A^^>AvvvA
+        # create a robot directional keypad        
+        robotDir = RobotDirectionalKeypad()
+        # create the list of all possible combinations 
+        symbols="<v>^A" 
+        couples=[]
+        for s in symbols:
+            for s2 in symbols:
+                if s+s2 in ["<>", "><", "^v", "v^"]:
+                    continue
+                couples.append(s+s2)
+        # now I create few think
+        # hashcount: how many examples are there for each couple? We always start with "A"
+        hash_seqs=populate_hashcount("A"+seq1, couples) # remember to start from A
+        hash_resp={couple:robotDir.get_minpath(couple)+"A" for couple in couples}
+        # for each couple, what is the corresponding path?
+        resp_hash={v: seq2instr(v) for _, v in hash_resp.items()}
+        # for each path, what are the couples that compose it?
+        for _ in range(num_robots):     # for each robot       
+            new_hash_seqs=populate_hashcount("", couples)
+            for instr, count in hash_seqs.items(): # now I know there are N counts
+                resp = hash_resp[instr] 
+                new_instrs= resp_hash[resp]
+                for nin in new_instrs:
+                    new_hash_seqs[nin]+= count
+            hash_seqs = new_hash_seqs            
+        
+        len_seq=np.sum([c for _, c in hash_seqs.items()])
+        
+        
+    # 5. compute complexity as length of the sequence * code
+        complexities.append(int(data["codes_int"][c])*len_seq)
+        printd(f"\t {int(data["codes_int"][c])}*{len_seq} = {complexities[-1]}")
     return complexities
 
 
@@ -183,29 +256,21 @@ if __name__ == "__main__":
 
     complexities = solve_quiz1(fn=quiz_fn)
     total_complexity = np.sum(complexities) 
-    check_test(f"🎄 🎄 🎄 Quiz1 result is", total_complexity,-1)
-        
+    check_test(f"🎄 🎄 🎄 Quiz1 result is", total_complexity,179444)
 
-# %%
-# TRUE: <v<A >>^A vA ^A <vA  <A   A >>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A
-# MINE: v<<A >>^A vA ^A v<<A >>^A A v<A<A>>^AAvAA^<A>Av<A^>AA<A>Av<A<A>>^AAA<Av>A^A
-robotNum=RobotDirNumericKeypad()
-robotDir=RobotDirectionalKeypad()
 
-seq3="<v<A >>^A vA ^A <vA  <A   A >>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A"
-seq2=robotDir.type(seq3.replace(" ",""))
-seq1=robotDir.type(seq2)
-code=robotNum.type(seq1)
-# %%
-# CODE         3           7  9   A
-# seq1_true = '^A  <<^^    A>>AvvvA'
-# seq1_mine = '^A  ^^<<    A>>AvvvA'
-# 
-# SEQ1          ^ A           < <    ^ ^  A
-# seq2_true = '<A>A       v<< A A >^ A A >A         vAA^A<vAAA>^A'
-# SEQ1 mine                 ^ ^    < <    A
-# seq2_mine = '<A>A       < A A v< A A >>^A         vAA^Av<AAA^>A'
 
-# SEQ 2           <    A  >  A   
-# seq3 true = '<v<A >>^A vA ^A <vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^    AAAvA<^A>A'
-# seq3 mine = 'v<<A >>^A vA ^A v<<A>>^AAv<A<A>>^AAvAA^<A>Av<A^>AA<A>Av<A<A>>^AAA<Av>A^A'
+    complexities = solve_quiz2(test_data=test_data, num_robots=2)
+    total_complexity = np.sum(complexities) 
+    i=0
+    for complexity, true_compl in zip(complexities, (68*29, 60*980, 68*179, 64*456, 64*379)):
+        check_test(f"\t2.{i+1} Comparing complexity", complexity, true_result=true_compl)
+        i+=1
+
+    complexities = solve_quiz2(fn=quiz_fn, num_robots=2)
+    total_complexity = np.sum(complexities) 
+    check_test(f"🎄 🎄 🎄 Quiz1 result with fast solution is", total_complexity,179444)
+
+    complexities = solve_quiz2(fn=quiz_fn, num_robots=25)
+    total_complexity = np.sum(complexities) 
+    check_test(f"🎅 🎅 🎅 Quiz2 result is", total_complexity,223285811665866)

@@ -70,6 +70,9 @@ Day 15 was solved Dec 20. December is a wonderful month, but there are too many 
 ### Day 20
 I skipped too many days, so now I'll try to keep up with new quizzes and then solve old ones.
 
+### Day 21
+Took me long, but happy to see that what I learned from Day11 helped me today.
+
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
 You can learn other info on myself and contact me through my website mbuccoli.github.io .
