@@ -7,7 +7,19 @@ def check_test(quiz_n, result, true_result):
         result == true_result
     ), f"❌ Quiz {quiz_n} solution {result} does not match correct solution {true_result}"
     print(f"✅ Quiz {quiz_n} solution {result} matches correct solution {true_result}")
-    
+
+def check_solution(quiz_n, result, expected_result=None):
+    if quiz_n ==1 or (isinstance(quiz_n, str) and "1" in quiz_n):
+        emoji="🎄 🎄 🎄"
+    else:
+        emoji="🎅 🎅 🎅"
+
+    string=emoji + f" Quiz {quiz_n} solution " 
+    if expected_result is not None:
+        check_test(string, result, expected_result)
+    else:
+        print(string+f"is {result}")
+
 
 def parse_mat(text, map_func=lambda x: x):
     mat = [np.array([map_func(char) for char in line]) for line in text.split("\n")]
