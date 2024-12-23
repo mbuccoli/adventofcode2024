@@ -175,6 +175,7 @@ def solve_quiz1(fn=None, test_data=None, ):
     text_data = get_data(fn, test_data)
     data = parse(text_data)
     data = clean_patterns(data)
+
     data = get_possible_designs(data)
     return data["N_present"]
 # %%
@@ -191,8 +192,9 @@ ubwu
 bwurrg
 brgr
 bbrgwb"""
-   N=solve_quiz1(test_data=test_data)
-   check_test(1, N, true_result=6)
+
+    N=solve_quiz1(test_data=test_data)
+    check_test(1, N, true_result=6)
 
     N = solve_quiz1(fn=quiz_fn)
-    check_solution(1, N)
+    check_solution(1, N, 300)
