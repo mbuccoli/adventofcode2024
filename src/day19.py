@@ -70,3 +70,129 @@
 # (does it look easy?, well, recursively it may work!)
 
 # (what is the brute force? check ALL the possible combinations and remove the design that shows it, until just few nonpossible designs remain)
+
+# %%
+import numpy as np
+from common import INPUT_DIR, check_solution, check_test, get_data
+from tqdm import tqdm
+def parse(text_data):
+    patterns, designs = text_data.split("\n\n")
+    patterns = patterns.split(", ")
+    designs = designs.split("\n")
+    return {"patterns": patterns, "designs":designs}
+
+def find_all(string, substring):
+    indices=[]
+    
+    start_str=0
+    while start_str<len(string):        
+        k=string[start_str:].find(substring)
+        if k==-1:
+            break
+        indices.append(k+start_str)
+        start_str+=k+1
+
+    return indices
+
+def is_possible(design, patterns):
+    good_patterns=[]
+    design_num=np.zeros((len(patterns), len(design)))
+    for p, pattern in enumerate(patterns):
+        idxs=find_all(design, pattern)
+        P=len(pattern)
+        if len(idxs)>0:
+            good_patterns.append(p)
+        for idx in idxs:
+            Pend=min(len(design), idx+P)
+            design_num[p, idx:Pend]+=1
+    if np.any(np.sum(design_num, axis=0)==0):
+        return False, None
+    good_patterns=np.array(good_patterns)
+    design_num=design_num[good_patterns,:]
+    good_patterns=[patterns[p] for p in good_patterns]
+    return True, good_patterns # non True, but let's try
+
+def find_combination_substr(design,patterns):
+    possible_combinations=[]
+    found_it=False
+    for pattern in patterns:
+        if not design.startswith(pattern):
+            continue
+        if design==pattern:
+            found_it=True
+        if design.startswith(pattern):
+            possible_combinations.append(pattern)
+            
+    return possible_combinations, found_it
+
+def sort_by_length(array):
+    lengths=[len(a) for a in array] 
+    
+    array=[array[i] for i in np.argsort(lengths)]
+    return array
+
+
+def find_combination(design,patterns):
+    possible_combinations, found_it = find_combination_substr(design, patterns)
+    if found_it:
+        return True
+    possible_combinations=sort_by_length(possible_combinations)[::-1]
+    for pc in possible_combinations:
+        if find_combination(design[len(pc):], patterns):
+            return True
+    return False
+
+def get_possible_designs(data):
+    is_present=[]
+    N_present=0
+    for design in tqdm(data["designs"]):
+        is_possible_design, good_patterns = is_possible(design, data["patterns"])
+        if not is_possible_design:
+            is_present.append(False)
+            continue
+        is_present.append(find_combination(design, good_patterns))
+        N_present+=int(is_present[-1])
+    data["is_present"]=is_present
+    data["N_present"]=N_present
+    
+    return data
+
+def clean_patterns(data):
+    data["patterns"]=sort_by_length(data["patterns"])[::-1]
+    remove_P=[]
+    for p, pattern in enumerate(data["patterns"][:-1]):
+        if find_combination(pattern, data["patterns"][p+1:]):
+            remove_P.append(p)
+            if len(remove_P)==1:
+                print("Removing: ", end="")
+            print(f" {pattern} ", end="")
+    print()
+    for p in remove_P[::-1]:
+        del data["patterns"][p]
+    
+    return data
+def solve_quiz1(fn=None, test_data=None, ):
+    text_data = get_data(fn, test_data)
+    data = parse(text_data)
+    data = clean_patterns(data)
+    data = get_possible_designs(data)
+    return data["N_present"]
+# %%
+if __name__=="__main__":
+    quiz_fn = INPUT_DIR / "day19.txt"
+    
+    test_data="""r, wr, b, g, bwu, rb, gb, br
+
+brwrr
+bggr
+gbbr
+rrbgbr
+ubwu
+bwurrg
+brgr
+bbrgwb"""
+   N=solve_quiz1(test_data=test_data)
+   check_test(1, N, true_result=6)
+
+    N = solve_quiz1(fn=quiz_fn)
+    check_solution(1, N)
