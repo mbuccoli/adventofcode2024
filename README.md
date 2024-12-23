@@ -67,11 +67,17 @@ Quiz 1 was quick, quiz 2 was hard, but luckily I got the right intuition (dear s
 ### Day 15
 Day 15 was solved Dec 20. December is a wonderful month, but there are too many deadlines and it was hard to find the energy to code after dinner, or the time to do it during lunch break.
 
+### Day 19 (done after Day22)
+First quiz took me short enough after I realized I could get rid of the redundant patterns (those that could be made by means of other patterns). Now I have the opposite problem: I need to describe EVERY possible combination of patterns. This is basically breaking my solution so I'm calling it a day.
+
 ### Day 20
 I skipped too many days, so now I'll try to keep up with new quizzes and then solve old ones.
 
 ### Day 21
 Took me long, but happy to see that what I learned from Day11 helped me today.
+
+### Day22
+Well, this was exhausting and at the end I basically brute-forced it.
 
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
