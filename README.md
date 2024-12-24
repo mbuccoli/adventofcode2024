@@ -80,7 +80,7 @@ Took me long, but happy to see that what I learned from Day11 helped me today.
 Well, this was exhausting and at the end I basically brute-forced it. 
 
 ### Day23
-Only Quiz1 yet
+Solved both. Second quiz seemed harder, but I think I found an elegant and rather unexpensive solution.
 
 ### Day24
 Quiz1 was easy, quiz2 was struggling
