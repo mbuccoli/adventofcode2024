@@ -39,10 +39,11 @@ now, I only have 2098 stuff for 2000 steps, so the final matrix is
 import numpy as np
 from common import INPUT_DIR, get_data, check_test,check_solution
 from tqdm import tqdm
-
+import matplotlib.pyplot as plt
 def printd(*args):
     #print(*args)
     pass
+
 # %%
 
 def parse(text_data):
@@ -64,7 +65,42 @@ def build_data(data):
         mat_conn[c1,c2]=mat_conn[c2,c1]=1
     data["pc_names"]=pc_names
     data["mat_conn"]=mat_conn
+    plt.figure()
+    plt.imshow(mat_conn, aspect="auto")
+    
     return data
+
+def find_N(data):
+    def recursive_find(mat, names, so_far=[]):
+        maxN=0
+        names_list=[]
+        for i, name_i in enumerate(names):
+            mat_i=mat[i:,i:]*mat[i:][None,:]
+            mat_i=mat_i[1:,1:] # skip myself to avoid cycling
+            
+            
+            idxs=np.where(mat[i,:]>0)[0] # all PC connected to pc_name
+            idxs=idxs[idxs>i]            # among those higher then pc_name (sorting)
+            so_far_i=so_far+[name_i,]
+            if idxs.size==0:
+                return so_far
+            J=idxs[0]
+            
+            new_names=names[J:]            
+            names_list=None
+            maxN=0
+            for j in idxs:
+                names_j = recursive_find(mat_i,new_names, so_far)
+                if len(names_j) > maxN:
+                    names_list = names_j 
+        return names_list
+ 
+    mat=data["mat_conn"]
+    pc_names=data["pc_names"]
+ 
+
+    
+
 
 def find_3(data):
     mat=data["mat_conn"]
@@ -81,9 +117,10 @@ def find_3(data):
             idxs = idxs[idxs>j] # only if k > j > i
             for k in idxs:
                 nk=pc_names[k][0]
-                all3.append((i, j, k))
+                to_add=[name_i, pc_names[j], pc_names[k]]
+                all3.append(to_add)
                 if "t" in [ni, nj, nk]:
-                    t3.append((i, j, k))
+                    t3.append(to_add)
     data["all3"]=all3
     data["t3"]= t3
     return data
@@ -141,6 +178,19 @@ td-yn"""
         
     
     solution=solve_quiz1(fn=quiz_fn, start_with_t=True)
-    check_solution(1, solution, 1023)        
+    check_solution(1, solution, 1062)        
     
+# %%
+data = build_data({"conn2":parse(get_data(fn=quiz_fn, test_data=None))})
+# every node is connected with EXACTLY 13 other nodes, so we know we can have at maximum 13 interconnected nodes in the LAN party
+# 
+#  
+# Can I use a product?
+
+# if A and B are connected, B and C are connected, A and C are connected, I know there is a group of three
+
+# SELF SIMILARITY WITH  PRODUCT?
+# A and B are similar if they are connected with the same people.
+
+plt.imshow(data["mat_conn"] @ data["mat_conn"], aspect="auto")
 # %%
