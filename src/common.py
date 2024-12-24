@@ -2,6 +2,10 @@ from pathlib import Path
 import numpy as np
 INPUT_DIR= Path(__file__).parent.parent / "inputs"
 
+
+printd=print
+def dontprint(*args, **kwargs):
+    return
 def check_test(quiz_n, result, true_result):
     assert (
         result == true_result

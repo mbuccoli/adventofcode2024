@@ -70,33 +70,6 @@ def build_data(data):
     
     return data
 
-def find_N(data):
-    def recursive_find(mat, names, so_far=[]):
-        maxN=0
-        names_list=[]
-        for i, name_i in enumerate(names):
-            mat_i=mat[i:,i:]*mat[i:][None,:]
-            mat_i=mat_i[1:,1:] # skip myself to avoid cycling
-            
-            
-            idxs=np.where(mat[i,:]>0)[0] # all PC connected to pc_name
-            idxs=idxs[idxs>i]            # among those higher then pc_name (sorting)
-            so_far_i=so_far+[name_i,]
-            if idxs.size==0:
-                return so_far
-            J=idxs[0]
-            
-            new_names=names[J:]            
-            names_list=None
-            maxN=0
-            for j in idxs:
-                names_j = recursive_find(mat_i,new_names, so_far)
-                if len(names_j) > maxN:
-                    names_list = names_j 
-        return names_list
- 
-    mat=data["mat_conn"]
-    pc_names=data["pc_names"]
  
 
     
@@ -134,6 +107,49 @@ def solve_quiz1(fn=None, test_data=None, start_with_t=True):
         return len(data["t3"])
 
     return len(data["all3"])
+
+def find_psw(mat, check_idx=None, prev_idx=0):
+    N = mat.shape[0]
+    
+    if check_idx is None: # first: check everything
+        check_idx=np.ones((N,))
+    
+    idxs=np.where(check_idx==1)[0] 
+    # only for the current stuff
+    
+    if idxs.size==0: # if I can't go forward, I skip this
+        return []
+    max_how_many=0 # maximum count
+    which_ones=None
+    for i in idxs:        
+        # let's count what happens forward, only considering:
+        # 1. the matrix starting from the index I just found 
+        #     e.g., index 10, I'm looking from index 11 on
+        # 2. # the connection I need to keep are: those kept so far (check_idxs) times the ones that I'll be exploring of myself mat[i]    
+        which_ones_i=[prev_idx+i,]
+        if mat[i, i+1:].shape!=check_idx[i+1:].shape:
+            pass
+        which_ones_i += find_psw(mat[i+1:,i+1:], mat[i, i+1:]*check_idx[i+1:], prev_idx+i+1)
+        if len(which_ones_i) > max_how_many:
+            which_ones = which_ones_i
+            max_how_many=len(which_ones_i)
+
+    return which_ones
+    
+
+def find_password(data):   
+    idxs=find_psw(data["mat_conn"])
+    pc_names= [data["pc_names"][i] for i in idxs]
+    pc_names.sort()
+    return ",".join(pc_names)
+
+def solve_quiz2(fn=None, test_data=None):
+    text_data = get_data(fn, test_data)
+    data = {"conn2":parse(text_data)}
+    data = build_data(data)
+    return find_password(data)
+
+
 
 
 if __name__ == "__main__":
@@ -180,17 +196,7 @@ td-yn"""
     solution=solve_quiz1(fn=quiz_fn, start_with_t=True)
     check_solution(1, solution, 1062)        
     
-# %%
-data = build_data({"conn2":parse(get_data(fn=quiz_fn, test_data=None))})
-# every node is connected with EXACTLY 13 other nodes, so we know we can have at maximum 13 interconnected nodes in the LAN party
-# 
-#  
-# Can I use a product?
+    solution=solve_quiz2(fn=quiz_fn)
+    check_solution(2, solution, "bz,cs,fx,ms,oz,po,sy,uh,uv,vw,xu,zj,zm")        
+    
 
-# if A and B are connected, B and C are connected, A and C are connected, I know there is a group of three
-
-# SELF SIMILARITY WITH  PRODUCT?
-# A and B are similar if they are connected with the same people.
-
-plt.imshow(data["mat_conn"] @ data["mat_conn"], aspect="auto")
-# %%

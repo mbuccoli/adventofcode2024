@@ -73,7 +73,10 @@
 
 # %%
 import numpy as np
-from common import INPUT_DIR, check_solution, check_test, get_data
+from common import INPUT_DIR, check_solution, check_test, get_data, printd, dontprint
+
+
+printd=dontprint
 from tqdm import tqdm
 def parse(text_data):
     patterns, designs = text_data.split("\n\n")
@@ -164,9 +167,9 @@ def clean_patterns(data):
         if find_combination(pattern, data["patterns"][p+1:]):
             remove_P.append(p)
             if len(remove_P)==1:
-                print("Removing: ", end="")
-            print(f" {pattern} ", end="")
-    print()
+                printd("Removing: ", end="")
+            printd(f" {pattern} ", end="")
+    printd()
     for p in remove_P[::-1]:
         del data["patterns"][p]
     
