@@ -77,7 +77,14 @@ I skipped too many days, so now I'll try to keep up with new quizzes and then so
 Took me long, but happy to see that what I learned from Day11 helped me today.
 
 ### Day22
-Well, this was exhausting and at the end I basically brute-forced it.
+Well, this was exhausting and at the end I basically brute-forced it. 
+
+### Day23
+Only Quiz1 yet
+
+### Day24
+Quiz1 was easy, quiz2 was struggling
+
 
 ## Who am I
 My name is Michele Buccoli, I am not a developer. My job is not coding, but it involves coding. Actually, as a senior scientist at BdSound, my job involves reviewing other people's code (poteto potato tometo tomato).
