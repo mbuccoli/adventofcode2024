@@ -174,6 +174,31 @@ def clean_patterns(data):
         del data["patterns"][p]
     
     return data
+
+
+def get_possible_designs2(data):
+    designs=data["designs"]
+    patterns=data["patterns"]
+    hash_info={}
+    def rec_func(design, patterns):
+        if design in hash_info:
+            return hash_info[design]
+        if len(design)==0:
+            return 1
+        ans=0
+        for p in patterns:
+            
+            if design.startswith(p):
+                ans += rec_func(design[len(p):], patterns)
+
+        hash_info[design]=ans
+        return ans
+    num_design=[]
+    for design in tqdm(designs):
+        num_design.append(rec_func(design, patterns))
+    data["num_design"]=num_design
+    return data
+
 def solve_quiz1(fn=None, test_data=None, ):
     text_data = get_data(fn, test_data)
     data = parse(text_data)
@@ -181,6 +206,13 @@ def solve_quiz1(fn=None, test_data=None, ):
 
     data = get_possible_designs(data)
     return data["N_present"]
+
+def solve_quiz2(fn=None, test_data=None, ):
+    text_data = get_data(fn, test_data)
+    data = parse(text_data)
+    
+    data = get_possible_designs2(data)
+    return np.sum(data["num_design"])
 # %%
 if __name__=="__main__":
     quiz_fn = INPUT_DIR / "day19.txt"
@@ -201,3 +233,9 @@ bbrgwb"""
 
     N = solve_quiz1(fn=quiz_fn)
     check_solution(1, N, 300)
+
+    N=solve_quiz2(test_data=test_data)
+    check_test(1, N, true_result=16)
+
+    N = solve_quiz2(fn=quiz_fn)
+    check_solution(2, N)
