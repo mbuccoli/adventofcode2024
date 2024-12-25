@@ -75,7 +75,6 @@ def solve_quiz1(fn=None, test_data=None, grid_size=70, after_ns=1024):
     text_data = get_data(fn, test_data)
     data = parse(text_data)
     data = build_data(data, grid_size, after_ns)
-    print_mat(data["corrupted_grid"], {0: ".", -1: "#"})
     quickest_path = find_quickest_path(data)
     return quickest_path
 
@@ -145,10 +144,10 @@ if __name__ == "__main__":
     check_test("1.1", quickest_path, 22)
 
     quickest_path = solve_quiz1(fn=quiz_fn)
-    check_solution(1, quickest_path)
+    check_solution(1, quickest_path, 374)
 
     block_c = solve_quiz2(test_data=test_data, grid_size=6, after_ns=12)
-    check_test("1.1", block_c, "6,1")
+    check_test("2.1", block_c, "6,1")
 
     block_c = solve_quiz2(fn=quiz_fn)
     check_solution(2, block_c, "30,12")
